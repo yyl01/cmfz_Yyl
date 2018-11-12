@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper  namespace="com.baizhi.dao.AlbumDao">
+    <resultMap id="alMap" type="Album">
+        <id property="id" column="cid"/>
+        <result property="title" column="ctitle"/>
+        <result property="pdDate" column="cpdDate"/>
+        <result property="count" column="ccount"/>
+        <result property="coverImg" column="ccoverImg"/>
+        <result property="star" column="cstar"/>
+        <result property="author" column="cauthor"/>
+        <result property="broadCast" column="cbroadCast"/>
+        <result property="brief" column="cbrief"/>
+        <collection property="children" ofType="Chapter">
+            <id property="id" column="did"/>
+            <result property="title" column="dtitle"/>
+            <result property="size" column="size"/>
+            <result property="duration" column="duration"/>
+            <result property="downPath" column="downPath"/>
+            <result property="uploadTime" column="uploadTime"/>
+         </collection>
+    </resultMap>
+    <select id="queryAll" resultType="Album" resultMap="alMap">
+  	 	select c.id cid,c.title ctitle,c.pdDate cpdDate,c.count ccount,c.coverImg ccoverImg,c.star cstar,
+        c.author cauthor,c.broadCast cbroadCast, c.brief cbrief,d.id did,d.title dtitle,d.size size,d.duration duration,d.downPath downPath,d.uploadTime uploadTime
+        from album c left outer join chapter d
+        on c.id=d.album_id
+  	 </select>
+    <select id="queryByPage" parameterType="int" resultMap="alMap" >
+        select c.id cid,c.title ctitle,c.pdDate cpdDate,c.count ccount,c.coverImg ccoverImg,c.star cstar,
+        c.author cauthor,c.broadCast cbroadCast, c.brief cbrief,d.id did,d.title dtitle,d.size size,d.duration duration,d.downPath downPath,d.uploadTime uploadTime
+        from album c inner join chapter d
+        on c.id=d.album_id limit #{start},#{rows}
+    </select>
+    <select id="findTotals" resultType="int" >
+  	 	select count(*) from album
+  	 </select>
+    <select id="queryOne" parameterType="String" resultType="Album" >
+  	 	select * from album where id=#{id}
+  	 </select>
+    <insert id="insert" parameterType="Album">
+        insert into album values(#{id},#{title},#{pdDate},#{count},#{coverImg},#{star},#{author},#{broadCast},#{brief})
+    </insert>
+    <delete id="delete" parameterType="String">
+        delete  from album where id=#{id}
+    </delete>
+    <update id="update" parameterType="Album">
+        update album set title=#{title},imgPath=#{imgPath},status=#{status},date=#{date} where id=#{id}
+    </update>
+</mapper>

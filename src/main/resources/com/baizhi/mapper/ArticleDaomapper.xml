@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper  namespace="com.baizhi.dao.ArticleDao">
+    <select id="queryAll" resultType="Article" >
+          select * from article
+  	 </select>
+    <select id="queryByPage" parameterType="int" resultType="Article">
+        select * from article
+  	 	 limit #{start},#{rows}
+    </select>
+    <select id="findTotals" resultType="int" >
+  	 	select count(*) from article
+  	 </select>
+    <select id="queryOne" parameterType="String" resultType="Article" >
+  	 	select * from article where id=#{id}
+  	 </select>
+    <insert id="insert" parameterType="Article">
+        insert into article values(#{id},#{title},#{imgPath},#{content},#{pdDate},#{guru_id})
+    </insert>
+    <delete id="delete" parameterType="String">
+        delete  from article where id=#{id}
+    </delete>
+    <update id="update" parameterType="Article">
+        update article set title=#{title},imgPath=#{imgPath},content=#{content},pdDate=#{pdDate} where id=#{id}
+    </update>
+</mapper>
+        <!--
+        <?xml version="1.0" encoding="UTF-8"?>
+        <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+        <mapper  namespace="com.baizhi.dao.ArticleDao">
+            <resultMap type="Article" id="artMap">
+                <id property="id" column="cid"/>
+                <result property="title" column="ctitle"/>
+                <result property="imgPath" column="cimgPath"/>
+                <result property="content" column="ccontent"/>
+                <result property="pdDate" column="cpdDate"/>
+               <association property="guru" javaType="Guru">
+                   <id property="id" column="did"/>
+                   <result property="name" column="dname"/>
+                   <result property="headPic" column="dheadPic"/>
+                   <result property="sex" column="dsex"/>
+                   <result property="status" column="dstatus"/>
+               </association>
+            </resultMap>
+            <select id="queryAll" resultMap="artMap" >
+                   select c.id cid,c.title ctitle,c.imgPath cimgPath,c.content ccontent,c.pdDate cpdDate,
+                   d.id did,d.name dname,d.headPic dheadPic,d.sex dsex,d.status dstatus from article c
+                    inner join guru d
+                     on c.guru_id=d.id
+               </select>
+            <select id="queryByPage" parameterType="int" resultMap="artMap">
+                select c.id cid,c.title ctitle,c.imgPath cimgPath,c.content ccontent,c.pdDate cpdDate,
+                   d.id did,d.name dname,d.headPic dheadPic,d.sex dsex,d.status dstatus from article c
+                    inner join guru d
+                   on c.guru_id=d.id limit #{start},#{rows}
+            </select>
+            <select id="findTotals" resultType="int" >
+                   select count(*) from article
+               </select>
+            <select id="queryOne" parameterType="String" resultType="Article" >
+                   select * from article where id=#{id}
+               </select>
+            <insert id="insert" parameterType="Article">
+                insert into article values(#{id},#{title},#{imgPath},#{content},#{pdDate},#{guru.id})
+            </insert>
+            <delete id="delete" parameterType="String">
+                delete  from article where id=#{id}
+            </delete>
+            <update id="update" parameterType="Article">
+                update article set title=#{title},imgPath=#{imgPath},content=#{content},pdDate=#{pdDate} where id=#{id}
+            </update>
+        </mapper>-->
